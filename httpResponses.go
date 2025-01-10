@@ -10,9 +10,11 @@ import (
 
 var cl []CityLocation
 var weather Weather
-var data = make([]byte, 0, 1000000)
 
 func GetTempByCity(city string) string {
+
+	var data = make([]byte, 0, 1000000)
+
 	urlForCityInfo := fmt.Sprintf("https://api.openweathermap.org/geo/1.0/direct?q=%s&limit=1&appid=2362176bfeea8c0f2a129c30a714883b", city)
 	response, err := http.Get(urlForCityInfo)
 
