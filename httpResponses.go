@@ -14,7 +14,6 @@ var data = make([]byte, 0, 1000000)
 
 func GetTempByCity(city string) string {
 	urlForCityInfo := fmt.Sprintf("https://api.openweathermap.org/geo/1.0/direct?q=%s&limit=1&appid=2362176bfeea8c0f2a129c30a714883b", city)
-
 	response, err := http.Get(urlForCityInfo)
 
 	if err != nil {
@@ -42,6 +41,7 @@ func GetTempByCity(city string) string {
 	if len(cl) == 0 {
 		return "Леее, че нормально город не можешь писать??"
 	}
+
 	urlForTempInfo := fmt.Sprintf("https://api.openweathermap.org/data/2.5/weather?lat=%.7f&lon=%.7f&appid=2362176bfeea8c0f2a129c30a714883b", cl[0].Lat, cl[0].Lon)
 	response, err = http.Get(urlForTempInfo)
 
