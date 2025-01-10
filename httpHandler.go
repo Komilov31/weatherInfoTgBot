@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
+	// "log"
 	"net/http"
 )
 
@@ -18,7 +18,8 @@ func GetTempByCity(city string) string {
 	response, err := http.Get(urlForCityInfo)
 
 	if err != nil {
-		log.Fatal("Something with requesting for CityInfo went wrong!!")
+		// log.Fatal("Something with requesting for CityInfo went wrong!!")
+		return "Леее, че нормально город не можешь писать??"
 	}
 
 	if response.StatusCode == http.StatusOK {
@@ -27,21 +28,26 @@ func GetTempByCity(city string) string {
 		data, err = io.ReadAll(read)
 
 		if err != nil {
-			log.Fatal("Something went wrong with reading response")
+			// log.Fatal("Something went wrong with reading response")
+			return "Леее, че нормально город не можешь писать??"
 		}
 	}
 
 	err = json.Unmarshal(data, &cl)
 	if err != nil {
-		log.Fatal("Something went wrong while unmarshaling CityInfo")
+		// log.Fatal("Something went wrong while unmarshaling CityInfo")
+		return "Леее, че нормально город не можешь писать??"
 	}
 
+	if len(cl) == 0 {
+		return "Леее, че нормально город не можешь писать??"
+	}
 	urlForTempInfo := fmt.Sprintf("https://api.openweathermap.org/data/2.5/weather?lat=%.7f&lon=%.7f&appid=2362176bfeea8c0f2a129c30a714883b", cl[0].Lat, cl[0].Lon)
-
 	response, err = http.Get(urlForTempInfo)
 
 	if err != nil {
-		log.Fatal("Something with requesting for Temperature went wrong!!")
+		// log.Fatal("Something with requesting for Temperature went wrong!!")
+		return "Леее, че нормально город не можешь писать??"
 	}
 
 	if response.StatusCode == http.StatusOK {
@@ -50,13 +56,15 @@ func GetTempByCity(city string) string {
 		data, err = io.ReadAll(read)
 
 		if err != nil {
-			log.Fatal("Something went wrong with reading response")
+			// log.Fatal("Something went wrong with reading response")
+			return "Леее, че нормально город не можешь писать??"
 		}
 	}
 
 	err = json.Unmarshal(data, &weather)
 	if err != nil {
-		log.Fatal("Something went wrong while unmarshaling WeatherInfo")
+		// log.Fatal("Something went wrong while unmarshaling WeatherInfo")
+		return "Леее, че нормально город не можешь писать??"
 	}
 
 	result := weather.Main.Temp - 273.15

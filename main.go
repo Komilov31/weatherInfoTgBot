@@ -42,8 +42,8 @@ func main() {
 				msg.ReplyToMessageID = update.Message.MessageID
 				bot.Send(msg)
 			} else {
-				temp := GetTempByCity(message)
-				msg := tgbotapi.NewMessage(update.Message.Chat.ID, temp)
+				answer := GetTempByCity(message)
+				msg := tgbotapi.NewMessage(update.Message.Chat.ID, answer)
 				msg.ReplyToMessageID = update.Message.MessageID
 				bot.Send(msg)
 			}
