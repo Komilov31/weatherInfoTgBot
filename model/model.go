@@ -15,3 +15,11 @@ type Weather struct {
 	Main MainInfo `json:"main"`
 	Name string   `json:"name"`
 }
+
+var GratitudeMessages map[string]struct{} = map[string]struct{}{
+	"Ты молодец": struct{}{},
+	"Хорош":      struct{}{},
+	"Thank you":  struct{}{},
+	"Спасибо":    struct{}{},
+	"Красавчик":  struct{}{},
+}

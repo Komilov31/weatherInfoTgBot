@@ -95,3 +95,11 @@ func WeatherToString(city string, tempCelcius int) string {
 
 	return answer
 }
+
+func isGratitude(message string) string {
+	if _, ok := model.GratitudeMessages[message]; ok {
+		return message
+	}
+
+	return ""
+}

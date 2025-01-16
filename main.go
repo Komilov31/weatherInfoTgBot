@@ -36,7 +36,7 @@ func main() {
 			messageText := update.Message.Text
 
 			switch messageText {
-			case "Ты молодец":
+			case isGratitude(messageText):
 				stickerId := tgbotapi.FilePath("sticker.webm")
 				sticker := tgbotapi.NewSticker(update.Message.Chat.ID, stickerId)
 				sticker.ReplyToMessageID = update.Message.MessageID
