@@ -1,5 +1,24 @@
 package model
 
+var DefaultMessage = `
+Вот список доступных команд: 
+/weather     - для получения температуры у тебя в местности
+/setlocation - для установки твоего города
+
+Также тебе будет отправлен стикер, при благодарности боту!
+`
+
+type UserStore interface {
+	GetUserByName(userName string) (*User, error)
+	SetLocation(userName, city string) error
+}
+
+type User struct {
+	Id       int
+	UserName string
+	City     string
+}
+
 type CityLocation struct {
 	Name string  `json:"name"`
 	Lat  float64 `json:"lat"`
@@ -16,10 +35,11 @@ type Weather struct {
 	Name string   `json:"name"`
 }
 
-var GratitudeMessages map[string]struct{} = map[string]struct{}{
+var GratitudeMessages = map[string]struct{}{
 	"Ты молодец": struct{}{},
 	"Хорош":      struct{}{},
 	"Thank you":  struct{}{},
 	"Спасибо":    struct{}{},
 	"Красавчик":  struct{}{},
+	"Молодец":    struct{}{},
 }
