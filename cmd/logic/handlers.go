@@ -20,16 +20,39 @@ func (h *Handler) HandleWeatherCommand(userName string) string {
 	if err != nil {
 		return "Ты пока не указал свой город!" + model.DefaultMessage
 	}
-	weather := GetWeatherStringByCity(user.City)
+	weather := getWeatherByCoordinates(user)
 
 	return weather
 }
 
 func (h *Handler) HandleSetLocationCommand(userName, city string) string {
-	err := h.store.SetLocation(userName, city)
+
+	cityLocation, err := GetCityCoordinates(city)
+	if err != nil {
+		log.Fatal("Something went wrong while taking coordinates")
+		return "Леее, че нормально не можешь город писать? Попробуй еще раз!"
+	}
+
+	user := model.User{
+		UserName: userName,
+		City:     city,
+		Lat:      cityLocation.Lat,
+		Lon:      cityLocation.Lon,
+	}
+
+	err = h.store.SetLocation(&user)
 	if err != nil {
 		log.Fatal("Something went wrong while inserting to DB!")
 		return "Ваш город не был сохранен. Попробуйте еще раз!"
 	}
 	return "Ваш город был успешно сохранен"
+}
+
+func getWeatherByCoordinates(user *model.User) string {
+	weather, err := GetWeatherByCoordinates(user.Lon, user.Lat)
+	if err != nil {
+		return "Что то пошло не так. Не смог узнать погоду, прости!"
+	}
+
+	return WeatherToString(user.City, int(weather.Main.Temp-273.15))
 }

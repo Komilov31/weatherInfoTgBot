@@ -9,14 +9,16 @@ var DefaultMessage = `
 `
 
 type UserStore interface {
-	GetUserByName(userName string) (*User, error)
-	SetLocation(userName, city string) error
+	GetUserByName(string) (*User, error)
+	SetLocation(*User) error
 }
 
 type User struct {
 	Id       int
 	UserName string
 	City     string
+	Lat      float64
+	Lon      float64
 }
 
 type CityLocation struct {

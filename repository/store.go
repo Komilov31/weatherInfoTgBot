@@ -1,4 +1,4 @@
-package user
+package repository
 
 import (
 	"database/sql"
@@ -19,7 +19,7 @@ func (s *Store) GetUserByName(userName string) (*model.User, error) {
 	var user model.User
 
 	row := s.db.QueryRow("SELECT * FROM test WHERE username = $1", userName)
-	err := row.Scan(&user.Id, &user.UserName, &user.City)
+	err := row.Scan(&user.Id, &user.UserName, &user.City, &user.Lat, &user.Lon)
 	if err != nil {
 		log.Println(err)
 		return &user, err
@@ -28,27 +28,21 @@ func (s *Store) GetUserByName(userName string) (*model.User, error) {
 	return &user, nil
 }
 
-func (s *Store) SetLocation(userName, city string) error {
+func (s *Store) SetLocation(user *model.User) error {
 	sqlStatement := `
-	INSERT INTO test (username, city)
-	VALUES ($1, $2)`
+	INSERT INTO test (username, city, lat, lon)
+	VALUES ($1, $2, $3, $4)`
 
-	if userExists(s.db, userName) {
+	if userExists(s.db, user.UserName) {
 		sqlStatement = `
 		UPDATE test
-		SET city = $1
-		WHERE username = $2
+		SET city = $2, lat = $3, lon = $4
+		WHERE username = $1
 		`
-		_, err := s.db.Exec(sqlStatement, city, userName)
-		if err != nil {
-			return err
-			// log.Fatal("Something went wrong while inserting new user go DB")
-		}
-
-		return nil
 	}
 
-	_, err := s.db.Exec(sqlStatement, userName, city)
+	_, err := s.db.Exec(sqlStatement, user.UserName, user.City, user.Lat, user.Lon)
+
 	if err != nil {
 		return err
 		// log.Fatal("Something went wrong while inserting new user go DB")

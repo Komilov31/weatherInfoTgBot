@@ -6,9 +6,10 @@ import (
 
 	"github.com/Komilov31/weatherInfoBot/cmd/logic"
 	"github.com/Komilov31/weatherInfoBot/config"
-	"github.com/Komilov31/weatherInfoBot/db"
 	"github.com/Komilov31/weatherInfoBot/model"
-	"github.com/Komilov31/weatherInfoBot/user"
+	"github.com/Komilov31/weatherInfoBot/repository"
+
+	// "github.com/Komilov31/weatherInfoBot/user"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
@@ -27,8 +28,8 @@ func main() {
 
 	updates := bot.GetUpdatesChan(u)
 
-	db := db.InitStorage()
-	store := user.NewStore(db)
+	db := repository.InitStorage()
+	store := repository.NewStore(db)
 
 	handler := logic.NewHandler(store)
 
@@ -57,6 +58,7 @@ func main() {
 				bot.Send(answerMsg)
 			case "/setlocation":
 				msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Укажите город")
+				msg.ReplyToMessageID = update.Message.MessageID
 				bot.Send(msg)
 				nextMessage := <-updates
 				answerText := handler.HandleSetLocationCommand(
